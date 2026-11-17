@@ -3,7 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#efe8da" />
+  <meta name="theme-color" content="#3f7d63" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Turnos Alba" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+  <link rel="apple-touch-icon" href="/icon-192.png" />
   <title>Turnos Alba - Gestión</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1128,6 +1135,7 @@
           </div>
         </div>
         <div class="header-actions">
+          <button id="installHeaderBtn" class="sync-pill synced hidden" title="Instalar app en este dispositivo">📲 Instalar</button>
           <button id="syncBtn" class="sync-pill" title="Sincronizar con Netlify Blobs">
             <span class="sync-dot"></span>
             <span id="syncText">Local</span>
@@ -1289,9 +1297,10 @@
           <h2 class="card-title">☁️ Sincronización Netlify y Respaldo</h2>
         </div>
         <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 0;">
-          Al publicar en Netlify, todos los cambios se sincronizan automáticamente mediante <strong>Netlify Blobs</strong> entre tus dispositivos. También puedes exportar o importar una copia de seguridad en JSON.
+          Al publicar en Netlify, todos los cambios se sincronizan automáticamente mediante <strong>Netlify Blobs</strong> entre tus dispositivos. También puedes instalar la app en el móvil o exportar una copia de seguridad.
         </p>
         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <button class="btn btn-primary hidden" id="installSettingsBtn">📲 Instalar app en este dispositivo</button>
           <button class="btn btn-primary" id="forceSyncNowBtn">🔄 Sincronizar ahora</button>
           <button class="btn" id="exportJsonBtn">⬇️ Exportar JSON</button>
           <label class="btn" style="cursor: pointer;">
@@ -1308,6 +1317,44 @@
 
   <script>
     (function () {
+      // REGISTRO DE SERVICE WORKER PARA INSTALACIÓN PWA EN CHROME
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("/sw.js").catch(() => {});
+        });
+      }
+
+      let deferredInstallPrompt = null;
+      window.addEventListener("beforeinstallprompt", (e) => {
+        e.preventDefault();
+        deferredInstallPrompt = e;
+        const hBtn = document.getElementById("installHeaderBtn");
+        const sBtn = document.getElementById("installSettingsBtn");
+        if (hBtn) hBtn.classList.remove("hidden");
+        if (sBtn) sBtn.classList.remove("hidden");
+      });
+
+      window.addEventListener("appinstalled", () => {
+        deferredInstallPrompt = null;
+        const hBtn = document.getElementById("installHeaderBtn");
+        const sBtn = document.getElementById("installSettingsBtn");
+        if (hBtn) hBtn.classList.add("hidden");
+        if (sBtn) sBtn.classList.add("hidden");
+        showToast("Aplicación instalada correctamente");
+      });
+
+      async function triggerPwaInstall() {
+        if (!deferredInstallPrompt) return;
+        deferredInstallPrompt.prompt();
+        const choice = await deferredInstallPrompt.userChoice;
+        if (choice && choice.outcome === "accepted") {
+          deferredInstallPrompt = null;
+        }
+      }
+
+      document.getElementById("installHeaderBtn").addEventListener("click", triggerPwaInstall);
+      document.getElementById("installSettingsBtn").addEventListener("click", triggerPwaInstall);
+
       const MONTHS_ES = [
         "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
         "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
@@ -1315,13 +1362,13 @@
       const MONTHS_SHORT = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
 
       const DEFAULT_COLORS = {
-        AM: "#4ea685",   // Alba Mañana - Verde salvia fresco
-        AT: "#2f7a78",   // Alba Tarde - Verde eucalipto profundo
-        LM: "#e59a4c",   // Lucía Mañana - Melocotón dorado cálido
-        LT: "#cf6a4c",   // Lucía Tarde - Terracota coral suave
-        F:  "#dc5b6c",   // Festivo - Frambuesa pastel
-        V:  "#4b9cd3",   // Vacaciones - Azul cielo luminoso
-        LD: "#966fd6"    // Libre Disposición - Violeta lavanda vivo
+        AM: "#4ea685",
+        AT: "#2f7a78",
+        LM: "#e59a4c",
+        LT: "#cf6a4c",
+        F:  "#dc5b6c",
+        V:  "#4b9cd3",
+        LD: "#966fd6"
       };
 
       const DEFAULT_STATE = {

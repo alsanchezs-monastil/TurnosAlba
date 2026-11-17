@@ -14,7 +14,6 @@ function jsonResponse(status, body) {
 }
 
 export default async (req) => {
-  // Validación opcional por variable de entorno APP_PIN en Netlify
   const envPin = process.env.APP_PIN;
   if (envPin) {
     const providedPin = req.headers.get("x-app-pin") || "";
@@ -42,7 +41,6 @@ export default async (req) => {
       }
 
       const current = await store.get(STATE_KEY, { type: "json" });
-      // Control de concurrencia sencillo basado en updatedAt
       if (
         current &&
         current.updatedAt &&

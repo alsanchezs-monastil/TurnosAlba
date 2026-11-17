@@ -1,19 +1,19 @@
-# Turnos Alba · Gestión 75%
+# Turnos Alba - Gestión
 
-Aplicación web para la gestión de cuadrantes de enfermería con reducción de jornada del **75% (Alba)** y cobertura del **25% (Lucía)**, preparada para desplegar directamente en **GitHub + Netlify** con sincronización automática entre dispositivos mediante **Netlify Blobs**.
+Aplicación web para la gestión de cuadrantes de enfermería con porcentaje de jornada configurable (por defecto **75% Alba / 25% Lucía**, editable en cualquier momento desde **Ajustes**), preparada para desplegar en **GitHub + Netlify** con sincronización automática entre dispositivos mediante **Netlify Blobs**.
 
 ## Características principales
 
 - **Calendario interactivo con gestos:**
   - Navegación deslizando el dedo hacia izquierda/derecha (o con flechas).
-  - Relleno automático del patrón habitual de Alba: **Lunes, Miércoles, Jueves y Viernes de Mañana (`A.M.`)** y **Martes de Tarde (`A.T.`)**.
+  - Relleno automático del patrón habitual: **Lunes, Miércoles, Jueves y Viernes de Mañana (`A.M.`)** y **Martes de Tarde (`A.T.`)**.
   - Paleta de pinceles rápidos debajo del calendario: `A.M.`, `A.T.`, `L.M.`, `L.T.`, `F.` (Festivo), `V.` (Vacaciones), `LD` (Libre Disposición), `C.V.` (Cierre · Vacaciones con franjas) y `C.LD` (Cierre · LD con franjas).
-  - Resumen mensual completo al pie del calendario con porcentaje efectivo frente al `75%`, desviación exacta en turnos y desglose de horas.
+  - Resumen mensual completo al pie del calendario con porcentaje efectivo frente al objetivo configurado, desviación exacta en turnos y desglose de horas.
 - **Recuento Anual y Mensual:**
   - Alternancia entre **Visión Anual** (con tabla de los 12 meses y fila de **Total anual**) y **Visión Mensual**.
-  - Seguimiento de **Vacaciones (`23`)** y **LD (`6`)** clasificados automáticamente en **Disfrutados**, **Previstos** y **Pendientes**, con desplegable de fechas exactas.
+  - Seguimiento de **Vacaciones** y **LD** clasificados automáticamente en **Disfrutados**, **Previstos** y **Pendientes**, con desplegable de fechas exactas.
 - **Sincronización en la nube (Netlify Blobs) y PIN:**
-  - Sincronización automática entre el móvil de Alba y otros dispositivos sin necesidad de configurar bases de datos externas.
+  - Sincronización automática entre dispositivos sin necesidad de configurar bases de datos externas.
   - Pantalla de bloqueo por **PIN de 4 dígitos** (`1234` por defecto, editable en Ajustes o mediante la variable de entorno `APP_PIN` en Netlify).
 
 ## Cómo desplegar en GitHub y Netlify

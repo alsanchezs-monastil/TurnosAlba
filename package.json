@@ -1,0 +1,10 @@
+{
+  "name": "turnos-alba-gestion-75",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Gestor de turnos de enfermería (reducción 75% Alba / 25% Lucía) con sincronización en Netlify Blobs",
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0"
+  }
+}

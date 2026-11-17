@@ -1,0 +1,2502 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#efe8da" />
+  <title>Turnos Alba · Gestión 75%</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-page: #f3ede2;
+      --bg-page-2: #ebe2d3;
+      --bg-card: #fcf9f3;
+      --bg-card-soft: #f6f0e6;
+      --bg-header: rgba(247, 241, 231, 0.94);
+      --border-soft: #e2d7c5;
+      --border-strong: #cfc0a8;
+      --text-main: #2d2923;
+      --text-muted: #6e6559;
+      --text-soft: #968b7c;
+      --accent-sage: #3f7d63;
+      --accent-sage-soft: #e3efe9;
+      --accent-terra: #c86446;
+      --accent-terra-soft: #f9e8e2;
+      --shadow-card: 0 8px 24px -10px rgba(72, 58, 38, 0.12), 0 2px 6px -2px rgba(72, 58, 38, 0.06);
+      --shadow-soft: 0 3px 10px -3px rgba(72, 58, 38, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(180deg, var(--bg-page) 0%, var(--bg-page-2) 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      line-height: 1.45;
+    }
+
+    /* CABECERA FIJA SUPERIOR */
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: var(--bg-header);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-strong);
+      box-shadow: 0 4px 18px -8px rgba(65, 51, 32, 0.14);
+    }
+
+    .header-accent-bar {
+      height: 4px;
+      background: linear-gradient(90deg, #4ea685 0%, #3f7d63 45%, #e59a4c 75%, #cf6a4c 100%);
+    }
+
+    .header-inner {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 10px 14px 12px;
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #4ea685, #2f7a78);
+      color: #fff;
+      font-weight: 800;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px -2px rgba(47, 122, 120, 0.35);
+      letter-spacing: -0.02em;
+    }
+
+    .brand-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+      margin: 0;
+      line-height: 1.15;
+    }
+
+    .brand-sub {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sync-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 700;
+      border: 1px solid var(--border-soft);
+      background: var(--bg-card);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .sync-pill:hover {
+      border-color: var(--border-strong);
+      transform: translateY(-1px);
+    }
+
+    .sync-pill.synced {
+      background: #e5f3ec;
+      border-color: #b8dcc9;
+      color: #26634b;
+    }
+
+    .sync-pill.syncing {
+      background: #fdf3e1;
+      border-color: #ebd09e;
+      color: #8a5c18;
+    }
+
+    .sync-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #968b7c;
+    }
+
+    .sync-pill.synced .sync-dot {
+      background: #2f9e6e;
+      box-shadow: 0 0 0 3px rgba(47, 158, 110, 0.18);
+    }
+
+    .sync-pill.syncing .sync-dot {
+      background: #d98a2b;
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.35; }
+    }
+
+    .icon-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      border: 1px solid var(--border-soft);
+      background: var(--bg-card);
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.15s ease;
+    }
+
+    .icon-btn:hover {
+      background: var(--bg-card-soft);
+      color: var(--text-main);
+    }
+
+    /* PESTAÑAS SEGMENTADAS */
+    .nav-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      background: #e7decb;
+      padding: 4px;
+      border-radius: 14px;
+      border: 1px solid #d9ccb6;
+    }
+
+    .nav-tab {
+      border: none;
+      background: transparent;
+      padding: 8px 10px;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.18s ease;
+    }
+
+    .nav-tab.active {
+      background: var(--bg-card);
+      color: #295c47;
+      box-shadow: 0 3px 10px -2px rgba(55, 44, 28, 0.14);
+    }
+
+    /* CONTENEDOR PRINCIPAL */
+    .main-container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 14px 12px 42px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-soft);
+      border-radius: 22px;
+      padding: 16px;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 14px;
+    }
+
+    .card-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    /* BOTONES */
+    .btn {
+      border: 1px solid var(--border-soft);
+      background: var(--bg-card-soft);
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 700;
+      padding: 7px 12px;
+      border-radius: 11px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .btn:hover {
+      background: #ede4d4;
+      border-color: var(--border-strong);
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #479374, #336f57);
+      border-color: #2e654f;
+      color: #fff;
+      box-shadow: 0 4px 12px -3px rgba(51, 111, 87, 0.38);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #3e8568, #2b604b);
+      border-color: #265442;
+      color: #fff;
+    }
+
+    .btn-danger-soft {
+      background: #faece8;
+      border-color: #ecc9bf;
+      color: #a6432a;
+    }
+
+    .btn-danger-soft:hover {
+      background: #f5ddd6;
+    }
+
+    /* CALENDARIO */
+    .cal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .month-nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .month-label {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text-main);
+      min-width: 158px;
+      text-align: center;
+      text-transform: capitalize;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-arrow {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      border: 1px solid var(--border-soft);
+      background: var(--bg-card-soft);
+      color: var(--text-main);
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+
+    .nav-arrow:hover {
+      background: #e9dfd0;
+    }
+
+    .cal-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .weekdays-row {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      margin-bottom: 6px;
+      text-align: center;
+    }
+
+    .weekday-name {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      padding: 4px 0;
+    }
+
+    .weekday-name.wknd {
+      color: #b86c56;
+    }
+
+    .calendar-swipe-area {
+      touch-action: pan-y;
+      user-select: none;
+      overflow: hidden;
+      border-radius: 16px;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      transition: transform 0.22s ease, opacity 0.22s ease;
+    }
+
+    .calendar-grid.slide-left {
+      transform: translateX(-18px);
+      opacity: 0.45;
+    }
+
+    .calendar-grid.slide-right {
+      transform: translateX(18px);
+      opacity: 0.45;
+    }
+
+    .day-cell {
+      aspect-ratio: 1 / 1.04;
+      min-height: 54px;
+      border-radius: 16px;
+      border: 1.5px solid #e6dccb;
+      background: #f8f3ea;
+      padding: 6px 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.12s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    }
+
+    .day-cell:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px -3px rgba(60, 48, 30, 0.14);
+    }
+
+    .day-cell:active {
+      transform: scale(0.95);
+    }
+
+    .day-cell.empty {
+      background: transparent;
+      border-color: transparent;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .day-cell.weekend:not(.has-shift) {
+      background: #efe7d8;
+      border-color: #e2d6c1;
+    }
+
+    .day-cell.today {
+      box-shadow: 0 0 0 2.5px #3f7d63;
+    }
+
+    .day-num {
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1;
+      align-self: flex-start;
+      padding-left: 3px;
+      opacity: 0.88;
+    }
+
+    .day-code {
+      font-size: 13.5px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 2px;
+      text-align: center;
+    }
+
+    .swipe-hint {
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-soft);
+      margin-top: 8px;
+    }
+
+    /* PINCELES */
+    .brushes-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 7px;
+    }
+
+    @media (max-width: 640px) {
+      .brushes-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .day-cell {
+        min-height: 48px;
+        border-radius: 13px;
+        padding: 5px 3px;
+      }
+      .day-code {
+        font-size: 12.5px;
+      }
+    }
+
+    .brush-btn {
+      border-radius: 14px;
+      border: 2px solid transparent;
+      padding: 8px 9px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-align: left;
+      font-family: inherit;
+      transition: all 0.15s ease;
+      position: relative;
+    }
+
+    .brush-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .brush-btn.active {
+      border-color: #2d2923;
+      box-shadow: 0 5px 14px -4px rgba(45, 41, 35, 0.28);
+      transform: translateY(-1px);
+    }
+
+    .brush-code-pill {
+      font-size: 11.5px;
+      font-weight: 800;
+      min-width: 34px;
+      text-align: center;
+      padding: 3px 4px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.45);
+    }
+
+    .brush-info {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .brush-name {
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.15;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .brush-sub {
+      font-size: 10.5px;
+      opacity: 0.82;
+      font-weight: 600;
+    }
+
+    /* BARRA DE PROGRESO 75% */
+    .progress-wrap {
+      margin: 12px 0;
+    }
+
+    .progress-labels {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 6px;
+      gap: 8px;
+    }
+
+    .big-pct {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #2b654d;
+    }
+
+    .dev-badge {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #e6f2ec;
+      color: #266048;
+      border: 1px solid #c3dfd1;
+    }
+
+    .dev-badge.warn {
+      background: #fdf1e4;
+      color: #96571c;
+      border-color: #edd2b4;
+    }
+
+    .progress-track {
+      height: 14px;
+      background: #e8decb;
+      border-radius: 999px;
+      position: relative;
+      overflow: visible;
+      border: 1px solid #d8cab3;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #56b38f, #33775b);
+      transition: width 0.35s ease;
+      max-width: 100%;
+    }
+
+    .target-marker {
+      position: absolute;
+      top: -5px;
+      bottom: -5px;
+      width: 3px;
+      background: #c86446;
+      border-radius: 3px;
+      z-index: 2;
+    }
+
+    .target-tag {
+      position: absolute;
+      top: -20px;
+      transform: translateX(-50%);
+      font-size: 10px;
+      font-weight: 800;
+      color: #b35235;
+      white-space: nowrap;
+    }
+
+    /* GRID DE ESTADÍSTICAS */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .stat-box {
+      background: var(--bg-card-soft);
+      border: 1px solid var(--border-soft);
+      border-radius: 16px;
+      padding: 12px;
+    }
+
+    .stat-box-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .stat-main-val {
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+    }
+
+    .stat-detail {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-top: 3px;
+      font-weight: 500;
+    }
+
+    /* TARJETAS DESPLEGABLES VACACIONES / LD */
+    .leave-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    @media (max-width: 640px) {
+      .leave-cards-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .leave-card {
+      background: var(--bg-card);
+      border: 1.5px solid var(--border-soft);
+      border-radius: 20px;
+      padding: 14px 16px;
+      box-shadow: var(--shadow-soft);
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .leave-card:hover {
+      border-color: var(--border-strong);
+      transform: translateY(-1px);
+    }
+
+    .leave-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .leave-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14.5px;
+      font-weight: 800;
+    }
+
+    .leave-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 4px;
+    }
+
+    .leave-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      text-align: center;
+    }
+
+    .leave-metric-pill {
+      background: var(--bg-card-soft);
+      border: 1px solid var(--border-soft);
+      border-radius: 12px;
+      padding: 7px 4px;
+    }
+
+    .leave-metric-num {
+      font-size: 17px;
+      font-weight: 800;
+      display: block;
+      line-height: 1.1;
+    }
+
+    .leave-metric-lbl {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .leave-dropdown {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--border-strong);
+      cursor: default;
+    }
+
+    .date-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+      margin-bottom: 10px;
+    }
+
+    .date-chip {
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 4px 9px;
+      border-radius: 9px;
+      border: 1px solid var(--border-soft);
+      background: var(--bg-card-soft);
+      color: var(--text-main);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .date-chip:hover {
+      background: #e9dfd0;
+    }
+
+    .date-chip.previsto {
+      background: #eef5fc;
+      border-color: #bfd8f0;
+      color: #255b8a;
+    }
+
+    /* TABLA DESGLOSE POR MESES */
+    .table-scroll {
+      overflow-x: auto;
+      border-radius: 14px;
+      border: 1px solid var(--border-soft);
+    }
+
+    table.summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+      min-width: 560px;
+    }
+
+    table.summary-table th {
+      background: #efe7d8;
+      color: var(--text-muted);
+      font-weight: 800;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      padding: 9px 8px;
+      text-align: center;
+      border-bottom: 1px solid var(--border-strong);
+      white-space: nowrap;
+    }
+
+    table.summary-table th:first-child,
+    table.summary-table td:first-child {
+      text-align: left;
+      padding-left: 12px;
+      position: sticky;
+      left: 0;
+      background: inherit;
+      z-index: 1;
+    }
+
+    table.summary-table tbody tr {
+      background: var(--bg-card);
+      border-bottom: 1px solid #ece3d4;
+      cursor: pointer;
+      transition: background 0.12s ease;
+    }
+
+    table.summary-table tbody tr:nth-child(even) {
+      background: #f9f4eb;
+    }
+
+    table.summary-table tbody tr:hover {
+      background: #f0e7d8;
+    }
+
+    table.summary-table tbody tr.current-month-row {
+      background: #e8f3ed;
+      font-weight: 700;
+    }
+
+    table.summary-table td {
+      padding: 8px 8px;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    table.summary-table tfoot tr {
+      background: #e6decb;
+      font-weight: 800;
+      border-top: 2px solid var(--border-strong);
+      color: var(--text-main);
+    }
+
+    table.summary-table tfoot td {
+      padding: 10px 8px;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .vld-inline {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+
+    .tag-v {
+      background: #e1f0fa;
+      color: #21618c;
+      border: 1px solid #b8d8ee;
+      padding: 1px 6px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .tag-ld {
+      background: #efe7fa;
+      color: #5b3896;
+      border: 1px solid #d3c0ef;
+      padding: 1px 6px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    /* SELECTOR MENSUAL EN RECUENTO */
+    .month-pills-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    @media (max-width: 520px) {
+      .month-pills-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .month-pill {
+      padding: 7px 4px;
+      border-radius: 10px;
+      border: 1px solid var(--border-soft);
+      background: var(--bg-card-soft);
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    .month-pill.active {
+      background: #3f7d63;
+      border-color: #326650;
+      color: #fff;
+    }
+
+    /* AJUSTES Y FORMULARIOS */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    @media (max-width: 600px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .field-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .field-input {
+      padding: 9px 11px;
+      border-radius: 11px;
+      border: 1.5px solid var(--border-soft);
+      background: #fffdf9;
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .field-input:focus {
+      outline: none;
+      border-color: #3f7d63;
+    }
+
+    .color-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: var(--bg-card-soft);
+      border: 1px solid var(--border-soft);
+      gap: 10px;
+    }
+
+    input[type="color"] {
+      width: 36px;
+      height: 30px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    /* PANTALLA PIN */
+    .pin-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: linear-gradient(160deg, #efe7d8 0%, #e1d5c0 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .pin-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-strong);
+      border-radius: 26px;
+      padding: 26px 22px;
+      width: 100%;
+      max-width: 340px;
+      text-align: center;
+      box-shadow: 0 20px 45px -15px rgba(55, 42, 24, 0.25);
+    }
+
+    .pin-dots {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      margin: 18px 0;
+    }
+
+    .pin-dot {
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      border: 2px solid #968b7c;
+      background: transparent;
+      transition: all 0.15s ease;
+    }
+
+    .pin-dot.filled {
+      background: #3f7d63;
+      border-color: #3f7d63;
+      transform: scale(1.12);
+    }
+
+    .pin-pad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .pin-key {
+      height: 52px;
+      border-radius: 15px;
+      border: 1px solid var(--border-soft);
+      background: var(--bg-card-soft);
+      font-family: inherit;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all 0.12s ease;
+    }
+
+    .pin-key:active {
+      background: #dfd3be;
+      transform: scale(0.95);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #2d2923;
+      color: #fcf9f3;
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      font-weight: 700;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.22);
+      z-index: 90;
+      opacity: 0;
+      transition: all 0.25s ease;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <!-- PANTALLA DE BLOQUEO POR PIN -->
+  <div id="pinScreen" class="pin-overlay hidden">
+    <div class="pin-box">
+      <div class="brand-badge" style="margin: 0 auto 10px; width: 46px; height: 46px; font-size: 16px;">75%</div>
+      <h2 style="margin: 0; font-size: 19px; font-weight: 800;">Turnos Alba</h2>
+      <p style="margin: 4px 0 0; font-size: 12.5px; color: var(--text-muted);">Introduce el PIN de 4 dígitos</p>
+      <div class="pin-dots" id="pinDots">
+        <span class="pin-dot"></span>
+        <span class="pin-dot"></span>
+        <span class="pin-dot"></span>
+        <span class="pin-dot"></span>
+      </div>
+      <div id="pinError" style="font-size: 12px; color: #b94429; font-weight: 700; min-height: 18px;"></div>
+      <div class="pin-pad" id="pinPad"></div>
+    </div>
+  </div>
+
+  <!-- CABECERA FIJA -->
+  <header class="app-header">
+    <div class="header-accent-bar"></div>
+    <div class="header-inner">
+      <div class="header-top">
+        <div class="brand">
+          <div class="brand-badge">75%</div>
+          <div>
+            <h1 class="brand-title" id="headerTitle">Turnos Alba · Gestión 75%</h1>
+            <div class="brand-sub" id="headerSubtitle">Alba (75%) · Lucía (25%)</div>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button id="syncBtn" class="sync-pill" title="Sincronizar con Netlify Blobs">
+            <span class="sync-dot"></span>
+            <span id="syncText">Local</span>
+          </button>
+          <button id="lockBtn" class="icon-btn" title="Bloquear con PIN">🔒</button>
+        </div>
+      </div>
+
+      <nav class="nav-tabs">
+        <button class="nav-tab active" data-tab="calendario">📅 Calendario</button>
+        <button class="nav-tab" data-tab="recuento">📊 Recuento</button>
+        <button class="nav-tab" data-tab="ajustes">⚙️ Ajustes</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="main-container">
+
+    <!-- PESTAÑA 1: CALENDARIO -->
+    <section id="tab-calendario">
+      <div class="card">
+        <div class="cal-header">
+          <div class="month-nav">
+            <button class="nav-arrow" id="prevMonthBtn" aria-label="Mes anterior">‹</button>
+            <div class="month-label" id="currentMonthLabel">Noviembre 2026</div>
+            <button class="nav-arrow" id="nextMonthBtn" aria-label="Mes siguiente">›</button>
+          </div>
+          <div class="cal-actions">
+            <button class="btn" id="todayBtn">Hoy</button>
+            <button class="btn btn-primary" id="autoFillBtn">✨ Rellenar mes</button>
+            <button class="btn btn-danger-soft" id="clearMonthBtn">Limpiar</button>
+          </div>
+        </div>
+
+        <div class="weekdays-row">
+          <div class="weekday-name">Lun</div>
+          <div class="weekday-name">Mar</div>
+          <div class="weekday-name">Mié</div>
+          <div class="weekday-name">Jue</div>
+          <div class="weekday-name">Vie</div>
+          <div class="weekday-name wknd">Sáb</div>
+          <div class="weekday-name wknd">Dom</div>
+        </div>
+
+        <div class="calendar-swipe-area" id="calendarSwipeArea">
+          <div class="calendar-grid" id="calendarGrid"></div>
+        </div>
+        <div class="swipe-hint">Desliza a izquierda o derecha para cambiar de mes · Toca un día para asignar el pincel activo</div>
+      </div>
+
+      <!-- PINCELES RÁPIDOS DEBAJO DEL CALENDARIO -->
+      <div class="card">
+        <div class="card-title-row" style="margin-bottom: 10px;">
+          <h2 class="card-title">🖌️ Pincel rápido activo</h2>
+          <span style="font-size: 11.5px; color: var(--text-muted); font-weight: 600;" id="activeBrushLabel">Alba · Mañana (A.M.)</span>
+        </div>
+        <div class="brushes-grid" id="brushesGrid"></div>
+      </div>
+
+      <!-- RESUMEN MENSUAL COMPLETO AL PIE DEL CALENDARIO -->
+      <div class="card" id="monthlySummaryCard"></div>
+    </section>
+
+    <!-- PESTAÑA 2: RECUENTO -->
+    <section id="tab-recuento" class="hidden">
+      <div class="card" style="padding: 12px 16px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <button class="nav-arrow" id="prevYearBtn">‹</button>
+            <span style="font-size: 17px; font-weight: 800;" id="recuentoYearLabel">2026</span>
+            <button class="nav-arrow" id="nextYearBtn">›</button>
+          </div>
+          <div class="nav-tabs" style="width: auto; min-width: 230px;">
+            <button class="nav-tab active" id="viewAnualBtn">Visión Anual</button>
+            <button class="nav-tab" id="viewMensualBtn">Visión Mensual</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TARJETAS DESPLEGABLES DE VACACIONES Y LD -->
+      <div class="leave-cards-grid" id="leaveCardsContainer"></div>
+
+      <!-- CONTENIDO DINÁMICO ANUAL O MENSUAL -->
+      <div id="recuentoContent"></div>
+    </section>
+
+    <!-- PESTAÑA 3: AJUSTES -->
+    <section id="tab-ajustes" class="hidden">
+      <div class="card">
+        <div class="card-title-row">
+          <h2 class="card-title">👩‍⚕️ Personas y Jornada</h2>
+        </div>
+        <div class="form-grid">
+          <div class="field-group">
+            <label class="field-label">Nombre titular (75%)</label>
+            <input type="text" class="field-input" id="cfgPerson1Name" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Nombre compañera reducción (25%)</label>
+            <input type="text" class="field-input" id="cfgPerson2Name" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Objetivo porcentaje titular (%)</label>
+            <input type="number" class="field-input" id="cfgTargetPct" min="1" max="100" step="1" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Horas por turno estándar</label>
+            <input type="number" class="field-input" id="cfgShiftHours" min="1" max="24" step="0.5" />
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title-row">
+          <h2 class="card-title">🌴 Cupos Anuales (<span id="cfgQuotaYear">2026</span>)</h2>
+        </div>
+        <div class="form-grid">
+          <div class="field-group">
+            <label class="field-label">Días de Vacaciones disponibles</label>
+            <input type="number" class="field-input" id="cfgVacQuota" min="0" max="60" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Días de Libre Disposición (LD)</label>
+            <input type="number" class="field-input" id="cfgLdQuota" min="0" max="30" />
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title-row">
+          <h2 class="card-title">🎨 Colores de los Turnos</h2>
+          <button class="btn" id="resetColorsBtn">Restaurar paleta natura</button>
+        </div>
+        <div class="form-grid" id="colorsConfigGrid"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title-row">
+          <h2 class="card-title">🔐 Seguridad por PIN (4 dígitos)</h2>
+        </div>
+        <div class="form-grid">
+          <div class="field-group">
+            <label class="field-label">Estado del bloqueo</label>
+            <select class="field-input" id="cfgPinEnabled">
+              <option value="true">Activado (pedir PIN al abrir)</option>
+              <option value="false">Desactivado</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label class="field-label">Código PIN (4 dígitos)</label>
+            <input type="text" class="field-input" id="cfgPinCode" maxlength="4" pattern="[0-9]{4}" inputmode="numeric" />
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title-row">
+          <h2 class="card-title">☁️ Sincronización Netlify y Respaldo</h2>
+        </div>
+        <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 0;">
+          Al publicar en Netlify, todos los cambios se sincronizan automáticamente mediante <strong>Netlify Blobs</strong> entre tus dispositivos. También puedes exportar o importar una copia de seguridad en JSON.
+        </p>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <button class="btn btn-primary" id="forceSyncNowBtn">🔄 Sincronizar ahora</button>
+          <button class="btn" id="exportJsonBtn">⬇️ Exportar JSON</button>
+          <label class="btn" style="cursor: pointer;">
+            ⬆️ Importar JSON
+            <input type="file" id="importJsonInput" accept=".json" class="hidden" />
+          </label>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    (function () {
+      const MONTHS_ES = [
+        "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+      ];
+      const MONTHS_SHORT = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+
+      const DEFAULT_COLORS = {
+        AM: "#4ea685",   // Alba Mañana - Verde salvia fresco
+        AT: "#2f7a78",   // Alba Tarde - Verde eucalipto profundo
+        LM: "#e59a4c",   // Lucía Mañana - Melocotón dorado cálido
+        LT: "#cf6a4c",   // Lucía Tarde - Terracota coral suave
+        F:  "#dc5b6c",   // Festivo - Frambuesa pastel
+        V:  "#4b9cd3",   // Vacaciones - Azul cielo luminoso
+        LD: "#966fd6"    // Libre Disposición - Violeta lavanda vivo
+      };
+
+      const DEFAULT_STATE = {
+        updatedAt: Date.now(),
+        settings: {
+          person1Name: "Alba",
+          person2Name: "Lucía",
+          targetPct: 75,
+          shiftHours: 7,
+          pinEnabled: true,
+          pinCode: "1234",
+          colors: { ...DEFAULT_COLORS },
+          quotas: {
+            2025: { vac: 23, ld: 6 },
+            2026: { vac: 23, ld: 6 },
+            2027: { vac: 23, ld: 6 }
+          }
+        },
+        shifts: {} // { "YYYY-MM-DD": "AM" | "AT" | "LM" | "LT" | "F" | "V" | "LD" | "CV" | "CLD" }
+      };
+
+      const STORAGE_KEY = "turnos_alba_state_v1";
+      const UNLOCK_SESSION_KEY = "turnos_alba_unlocked_session";
+
+      let state = loadLocalState();
+      const now = new Date();
+      let currentYear = now.getFullYear();
+      let currentMonth = now.getMonth();
+      let recuentoYear = now.getFullYear();
+      let recuentoMode = "anual"; // "anual" | "mensual"
+      let recuentoMonth = now.getMonth();
+      let activeBrush = "AM";
+      let openLeaveDrawer = null; // "V" | "LD" | null
+      let pinBuffer = "";
+
+      function loadLocalState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return structuredClone(DEFAULT_STATE);
+          const parsed = JSON.parse(raw);
+          return {
+            ...structuredClone(DEFAULT_STATE),
+            ...parsed,
+            settings: {
+              ...structuredClone(DEFAULT_STATE.settings),
+              ...(parsed.settings || {}),
+              colors: {
+                ...DEFAULT_COLORS,
+                ...((parsed.settings && parsed.settings.colors) || {})
+              },
+              quotas: {
+                ...structuredClone(DEFAULT_STATE.settings.quotas),
+                ...((parsed.settings && parsed.settings.quotas) || {})
+              }
+            },
+            shifts: parsed.shifts || {}
+          };
+        } catch (e) {
+          return structuredClone(DEFAULT_STATE);
+        }
+      }
+
+      function saveLocalState() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      }
+
+      function showToast(msg) {
+        const el = document.getElementById("toast");
+        el.textContent = msg;
+        el.classList.add("show");
+        clearTimeout(el._timer);
+        el._timer = setTimeout(() => el.classList.remove("show"), 2300);
+      }
+
+      // SINCRONIZACIÓN NETLIFY BLOBS
+      function setSyncStatus(status, label) {
+        const btn = document.getElementById("syncBtn");
+        const txt = document.getElementById("syncText");
+        btn.className = "sync-pill " + status;
+        txt.textContent = label;
+      }
+
+      async function pullFromCloud(silent = false) {
+        setSyncStatus("syncing", "Sincronizando...");
+        try {
+          const res = await fetch("/api/state", {
+            method: "GET",
+            headers: {
+              "x-app-pin": state.settings.pinCode || ""
+            }
+          });
+          if (!res.ok) throw new Error("Offline");
+          const data = await res.json();
+          if (data && data.ok) {
+            if (data.state && (!state.updatedAt || Number(data.state.updatedAt) > Number(state.updatedAt))) {
+              state = {
+                ...structuredClone(DEFAULT_STATE),
+                ...data.state,
+                settings: {
+                  ...structuredClone(DEFAULT_STATE.settings),
+                  ...(data.state.settings || {}),
+                  colors: {
+                    ...DEFAULT_COLORS,
+                    ...((data.state.settings && data.state.settings.colors) || {})
+                  },
+                  quotas: {
+                    ...structuredClone(DEFAULT_STATE.settings.quotas),
+                    ...((data.state.settings && data.state.settings.quotas) || {})
+                  }
+                },
+                shifts: data.state.shifts || {}
+              };
+              saveLocalState();
+              renderAll();
+              if (!silent) showToast("Cuadrante actualizado desde la nube");
+            } else if (!data.state && Object.keys(state.shifts).length > 0) {
+              await pushToCloud(true);
+            }
+            setSyncStatus("synced", "Netlify Sync");
+            return;
+          }
+          throw new Error("No cloud");
+        } catch (e) {
+          setSyncStatus("", "Local");
+        }
+      }
+
+      let pushDebounce = null;
+      function schedulePushToCloud() {
+        clearTimeout(pushDebounce);
+        pushDebounce = setTimeout(() => pushToCloud(true), 450);
+      }
+
+      async function pushToCloud(silent = false) {
+        setSyncStatus("syncing", "Guardando...");
+        try {
+          const res = await fetch("/api/state", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-app-pin": state.settings.pinCode || ""
+            },
+            body: JSON.stringify(state)
+          });
+          if (!res.ok) throw new Error("No cloud");
+          const data = await res.json();
+          if (data && data.ok) {
+            if (data.merged && data.state) {
+              state = data.state;
+              saveLocalState();
+              renderAll();
+            }
+            setSyncStatus("synced", "Netlify Sync");
+            if (!silent) showToast("Sincronizado con Netlify Blobs");
+            return;
+          }
+          throw new Error("Sync error");
+        } catch (e) {
+          setSyncStatus("", "Local");
+          if (!silent) showToast("Guardado en este dispositivo (sin conexión nube)");
+        }
+      }
+
+      function commitStateChange() {
+        state.updatedAt = Date.now();
+        saveLocalState();
+        renderAll();
+        schedulePushToCloud();
+      }
+
+      // UTILIDADES DE COLOR Y ESTILO DE TURNOS
+      function hexToRgba(hex, alpha) {
+        const clean = hex.replace("#", "");
+        const num = parseInt(clean, 16);
+        const r = (num >> 16) & 255;
+        const g = (num >> 8) & 255;
+        const b = num & 255;
+        return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+      }
+
+      function darkenHex(hex, factor = 0.62) {
+        const clean = hex.replace("#", "");
+        const num = parseInt(clean, 16);
+        const r = Math.round(((num >> 16) & 255) * factor);
+        const g = Math.round(((num >> 8) & 255) * factor);
+        const b = Math.round((num & 255) * factor);
+        return `rgb(${r}, ${g}, ${b})`;
+      }
+
+      function getShiftMeta(code) {
+        const p1 = state.settings.person1Name || "Alba";
+        const p2 = state.settings.person2Name || "Lucía";
+        const c = state.settings.colors;
+
+        const map = {
+          AM:  { code: "A.M.", label: `${p1} · Mañana`, short: "Mañana", color: c.AM, striped: false },
+          AT:  { code: "A.T.", label: `${p1} · Tarde`, short: "Tarde", color: c.AT, striped: false },
+          LM:  { code: "L.M.", label: `${p2} · Mañana`, short: "Mañana", color: c.LM, striped: false },
+          LT:  { code: "L.T.", label: `${p2} · Tarde`, short: "Tarde", color: c.LT, striped: false },
+          F:   { code: "F.",   label: "Festivo", short: "No laborable", color: c.F, striped: false },
+          V:   { code: "V.",   label: "Vacaciones", short: "Descuenta cupo", color: c.V, striped: false },
+          LD:  { code: "LD",   label: "Libre Disposición", short: "Descuenta cupo", color: c.LD, striped: false },
+          CV:  { code: "C.V.", label: "Cierre · Vacaciones", short: "Cierre servicio", color: c.V, striped: true },
+          CLD: { code: "C.LD", label: "Cierre · LD", short: "Cierre servicio", color: c.LD, striped: true },
+          ERASE: { code: "✕",  label: "Borrar día", short: "Quitar turno", color: "#9c9183", striped: false }
+        };
+        return map[code] || null;
+      }
+
+      function getCellVisualStyle(code) {
+        const meta = getShiftMeta(code);
+        if (!meta) return "";
+        const baseBg = hexToRgba(meta.color, 0.24);
+        const borderCol = hexToRgba(meta.color, 0.58);
+        const textCol = darkenHex(meta.color, 0.54);
+
+        if (meta.striped) {
+          const stripeCol = hexToRgba(meta.color, 0.42);
+          return `background: repeating-linear-gradient(-45deg, ${baseBg}, ${baseBg} 6px, ${stripeCol} 6px, ${stripeCol} 12px); border-color: ${borderCol}; color: ${textCol};`;
+        }
+        return `background: ${baseBg}; border-color: ${borderCol}; color: ${textCol};`;
+      }
+
+      // FORMATOS DE FECHA
+      function pad2(n) {
+        return String(n).padStart(2, "0");
+      }
+
+      function toDateKey(y, m, d) {
+        return `${y}-${pad2(m + 1)}-${pad2(d)}`;
+      }
+
+      function getTodayKey() {
+        const t = new Date();
+        return toDateKey(t.getFullYear(), t.getMonth(), t.getDate());
+      }
+
+      function formatDisplayDate(dateKey) {
+        const [y, m, d] = dateKey.split("-").map(Number);
+        return `${d} ${MONTHS_SHORT[m - 1]}`;
+      }
+
+      // CÁLCULO DE ESTADÍSTICAS MENSUALES Y ANUALES
+      function computeMonthStats(year, month) {
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const hoursPerShift = Number(state.settings.shiftHours) || 7;
+        const targetRatio = (Number(state.settings.targetPct) || 75) / 100;
+
+        let am = 0, at = 0, lm = 0, lt = 0, festivos = 0, vac = 0, ld = 0;
+
+        for (let d = 1; d <= daysInMonth; d++) {
+          const key = toDateKey(year, month, d);
+          const s = state.shifts[key];
+          if (!s) continue;
+          if (s === "AM") am++;
+          else if (s === "AT") at++;
+          else if (s === "LM") lm++;
+          else if (s === "LT") lt++;
+          else if (s === "F") festivos++;
+          else if (s === "V" || s === "CV") vac++;
+          else if (s === "LD" || s === "CLD") ld++;
+        }
+
+        const albaShifts = am + at;
+        const luciaShifts = lm + lt;
+        // Días laborables efectivos: turnos trabajados entre ambas (excluye fines de semana sin turno, festivos, vacaciones y LD)
+        const effectiveWorkdays = albaShifts + luciaShifts;
+        const albaPct = effectiveWorkdays > 0 ? (albaShifts / effectiveWorkdays) * 100 : 0;
+        const expectedAlbaShifts = effectiveWorkdays * targetRatio;
+        const deviationShifts = albaShifts - expectedAlbaShifts;
+
+        return {
+          year,
+          month,
+          am,
+          at,
+          lm,
+          lt,
+          albaShifts,
+          luciaShifts,
+          albaHours: albaShifts * hoursPerShift,
+          luciaHours: luciaShifts * hoursPerShift,
+          totalHours: (albaShifts + luciaShifts) * hoursPerShift,
+          effectiveWorkdays,
+          albaPct,
+          expectedAlbaShifts,
+          deviationShifts,
+          festivos,
+          vac,
+          ld
+        };
+      }
+
+      function computeYearStats(year) {
+        const months = [];
+        for (let m = 0; m < 12; m++) {
+          months.push(computeMonthStats(year, m));
+        }
+
+        const totals = months.reduce((acc, m) => {
+          acc.am += m.am;
+          acc.at += m.at;
+          acc.lm += m.lm;
+          acc.lt += m.lt;
+          acc.albaShifts += m.albaShifts;
+          acc.luciaShifts += m.luciaShifts;
+          acc.albaHours += m.albaHours;
+          acc.luciaHours += m.luciaHours;
+          acc.totalHours += m.totalHours;
+          acc.effectiveWorkdays += m.effectiveWorkdays;
+          acc.festivos += m.festivos;
+          acc.vac += m.vac;
+          acc.ld += m.ld;
+          return acc;
+        }, {
+          am: 0, at: 0, lm: 0, lt: 0,
+          albaShifts: 0, luciaShifts: 0,
+          albaHours: 0, luciaHours: 0, totalHours: 0,
+          effectiveWorkdays: 0, festivos: 0, vac: 0, ld: 0
+        });
+
+        const targetRatio = (Number(state.settings.targetPct) || 75) / 100;
+        totals.albaPct = totals.effectiveWorkdays > 0 ? (totals.albaShifts / totals.effectiveWorkdays) * 100 : 0;
+        totals.expectedAlbaShifts = totals.effectiveWorkdays * targetRatio;
+        totals.deviationShifts = totals.albaShifts - totals.expectedAlbaShifts;
+
+        // Listado exacto de Vacaciones y LD del año clasificados en Disfrutados vs Previstos
+        const todayKey = getTodayKey();
+        const vacDisfrutados = [];
+        const vacPrevistos = [];
+        const ldDisfrutados = [];
+        const ldPrevistos = [];
+
+        const prefix = `${year}-`;
+        Object.keys(state.shifts).sort().forEach((key) => {
+          if (!key.startsWith(prefix)) return;
+          const s = state.shifts[key];
+          if (s === "V" || s === "CV") {
+            const item = { dateKey: key, isCierre: s === "CV" };
+            if (key <= todayKey) vacDisfrutados.push(item);
+            else vacPrevistos.push(item);
+          } else if (s === "LD" || s === "CLD") {
+            const item = { dateKey: key, isCierre: s === "CLD" };
+            if (key <= todayKey) ldDisfrutados.push(item);
+            else ldPrevistos.push(item);
+          }
+        });
+
+        const quotaObj = (state.settings.quotas && state.settings.quotas[year]) || { vac: 23, ld: 6 };
+        const vacQuota = Number(quotaObj.vac ?? 23);
+        const ldQuota = Number(quotaObj.ld ?? 6);
+
+        return {
+          year,
+          months,
+          totals,
+          vac: {
+            quota: vacQuota,
+            disfrutados: vacDisfrutados,
+            previstos: vacPrevistos,
+            pendientes: vacQuota - vacDisfrutados.length - vacPrevistos.length
+          },
+          ld: {
+            quota: ldQuota,
+            disfrutados: ldDisfrutados,
+            previstos: ldPrevistos,
+            pendientes: ldQuota - ldDisfrutados.length - ldPrevistos.length
+          }
+        };
+      }
+
+      function formatDeviation(dev) {
+        if (Math.abs(dev) < 0.05) return "Cuadrado exacto (0 turnos)";
+        const sign = dev > 0 ? "+" : "";
+        const val = Number.isInteger(dev) ? dev : dev.toFixed(1).replace(".", ",");
+        return `${sign}${val} turnos respecto al ${state.settings.targetPct}%`;
+      }
+
+      function formatDeviationShort(dev) {
+        if (Math.abs(dev) < 0.05) return "0";
+        const sign = dev > 0 ? "+" : "";
+        return `${sign}${Number.isInteger(dev) ? dev : dev.toFixed(1).replace(".", ",")}`;
+      }
+
+      // RENDER CABECERA
+      function renderHeader() {
+        const p1 = state.settings.person1Name || "Alba";
+        const p2 = state.settings.person2Name || "Lucía";
+        const pct1 = Number(state.settings.targetPct) || 75;
+        const pct2 = Math.max(0, 100 - pct1);
+        document.getElementById("headerTitle").textContent = `Turnos ${p1} · Gestión ${pct1}%`;
+        document.getElementById("headerSubtitle").textContent = `${p1} (${pct1}%) · ${p2} (${pct2}%)`;
+      }
+
+      // RENDER CALENDARIO + PINCELES + RESUMEN MENSUAL
+      function renderCalendar() {
+        document.getElementById("currentMonthLabel").textContent = `${MONTHS_ES[currentMonth]} ${currentYear}`;
+        const grid = document.getElementById("calendarGrid");
+        grid.innerHTML = "";
+
+        const firstDay = new Date(currentYear, currentMonth, 1);
+        // Lunes = 0 ... Domingo = 6
+        const startOffset = (firstDay.getDay() + 6) % 7;
+        const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+        const todayKey = getTodayKey();
+
+        for (let i = 0; i < startOffset; i++) {
+          const empty = document.createElement("div");
+          empty.className = "day-cell empty";
+          grid.appendChild(empty);
+        }
+
+        for (let d = 1; d <= daysInMonth; d++) {
+          const dateKey = toDateKey(currentYear, currentMonth, d);
+          const dayOfWeek = new Date(currentYear, currentMonth, d).getDay();
+          const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+          const shiftCode = state.shifts[dateKey];
+          const meta = shiftCode ? getShiftMeta(shiftCode) : null;
+
+          const cell = document.createElement("button");
+          cell.type = "button";
+          cell.className = "day-cell" +
+            (isWeekend ? " weekend" : "") +
+            (shiftCode ? " has-shift" : "") +
+            (dateKey === todayKey ? " today" : "");
+
+          if (shiftCode) {
+            cell.setAttribute("style", getCellVisualStyle(shiftCode));
+          }
+
+          const numSpan = document.createElement("span");
+          numSpan.className = "day-num";
+          numSpan.textContent = d;
+
+          const codeSpan = document.createElement("span");
+          codeSpan.className = "day-code";
+          codeSpan.textContent = meta ? meta.code : "";
+
+          cell.appendChild(numSpan);
+          cell.appendChild(codeSpan);
+
+          cell.addEventListener("click", () => {
+            if (isSwiping) return;
+            if (activeBrush === "ERASE") {
+              if (state.shifts[dateKey]) {
+                delete state.shifts[dateKey];
+                commitStateChange();
+              }
+            } else {
+              if (state.shifts[dateKey] === activeBrush) {
+                delete state.shifts[dateKey];
+              } else {
+                state.shifts[dateKey] = activeBrush;
+              }
+              commitStateChange();
+            }
+          });
+
+          grid.appendChild(cell);
+        }
+
+        renderBrushes();
+        renderMonthlySummaryCard();
+      }
+
+      function renderBrushes() {
+        const order = ["AM", "AT", "LM", "LT", "F", "V", "LD", "CV", "CLD", "ERASE"];
+        const container = document.getElementById("brushesGrid");
+        container.innerHTML = "";
+
+        const activeMeta = getShiftMeta(activeBrush);
+        if (activeMeta) {
+          document.getElementById("activeBrushLabel").textContent = `${activeMeta.label} (${activeMeta.code})`;
+        }
+
+        order.forEach((code) => {
+          const meta = getShiftMeta(code);
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "brush-btn" + (activeBrush === code ? " active" : "");
+
+          if (code === "ERASE") {
+            btn.setAttribute("style", "background: #efe8dc; color: #5b5247;");
+          } else {
+            btn.setAttribute("style", getCellVisualStyle(code));
+          }
+
+          btn.innerHTML = `
+            <span class="brush-code-pill">${meta.code}</span>
+            <span class="brush-info">
+              <span class="brush-name">${meta.label}</span>
+              <span class="brush-sub">${meta.short}</span>
+            </span>
+          `;
+
+          btn.addEventListener("click", () => {
+            activeBrush = code;
+            renderBrushes();
+          });
+
+          container.appendChild(btn);
+        });
+      }
+
+      function renderMonthlySummaryCard() {
+        const stats = computeMonthStats(currentYear, currentMonth);
+        const yearStats = computeYearStats(currentYear);
+        const p1 = state.settings.person1Name || "Alba";
+        const p2 = state.settings.person2Name || "Lucía";
+        const targetPct = Number(state.settings.targetPct) || 75;
+        const pctDisplay = stats.albaPct.toFixed(1).replace(".", ",");
+        const barWidth = Math.min(100, Math.max(0, stats.albaPct));
+        const isClose = Math.abs(stats.deviationShifts) <= 0.5;
+
+        const card = document.getElementById("monthlySummaryCard");
+        card.innerHTML = `
+          <div class="card-title-row">
+            <h2 class="card-title">📋 Resumen de ${MONTHS_ES[currentMonth]} ${currentYear}</h2>
+            <span class="dev-badge ${isClose ? "" : "warn"}">${formatDeviation(stats.deviationShifts)}</span>
+          </div>
+
+          <div class="progress-wrap">
+            <div class="progress-labels">
+              <div>
+                <span class="big-pct">${pctDisplay}%</span>
+                <span style="font-size: 12px; color: var(--text-muted); font-weight: 700;"> trabajado por ${p1} (${stats.albaShifts} de ${stats.effectiveWorkdays} días laborables efectivos)</span>
+              </div>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" style="width: ${barWidth}%;"></div>
+              <div class="target-marker" style="left: ${targetPct}%;">
+                <span class="target-tag">Obj. ${targetPct}%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-box">
+              <div class="stat-box-header">
+                <span>${p1} (${targetPct}%)</span>
+                <span>${stats.albaHours} h</span>
+              </div>
+              <div class="stat-main-val">${stats.albaShifts} turnos</div>
+              <div class="stat-detail">${stats.am} Mañanas · ${stats.at} Tardes</div>
+            </div>
+
+            <div class="stat-box">
+              <div class="stat-box-header">
+                <span>${p2} (${100 - targetPct}%)</span>
+                <span>${stats.luciaHours} h</span>
+              </div>
+              <div class="stat-main-val">${stats.luciaShifts} turnos</div>
+              <div class="stat-detail">${stats.lm} Mañanas · ${stats.lt} Tardes</div>
+            </div>
+
+            <div class="stat-box">
+              <div class="stat-box-header">
+                <span>Libres y Festivos</span>
+                <span>Total: ${stats.totalHours} h</span>
+              </div>
+              <div class="stat-main-val">${stats.vac} V · ${stats.ld} LD · ${stats.festivos} F</div>
+              <div class="stat-detail">Saldo anual: ${yearStats.vac.pendientes} V · ${yearStats.ld.pendientes} LD</div>
+            </div>
+          </div>
+        `;
+      }
+
+      // RENDER RECUENTO (ANUAL Y MENSUAL + DESPLEGABLES VACACIONES/LD)
+      function renderRecuento() {
+        document.getElementById("recuentoYearLabel").textContent = recuentoYear;
+        document.getElementById("viewAnualBtn").classList.toggle("active", recuentoMode === "anual");
+        document.getElementById("viewMensualBtn").classList.toggle("active", recuentoMode === "mensual");
+
+        const yStats = computeYearStats(recuentoYear);
+        const c = state.settings.colors;
+
+        // Tarjetas de Vacaciones y LD con desplegable
+        const leaveContainer = document.getElementById("leaveCardsContainer");
+        leaveContainer.innerHTML = "";
+
+        const leaveConfigs = [
+          {
+            key: "V",
+            title: "Vacaciones",
+            color: c.V,
+            data: yStats.vac
+          },
+          {
+            key: "LD",
+            title: "Libre Disposición (LD)",
+            color: c.LD,
+            data: yStats.ld
+          }
+        ];
+
+        leaveConfigs.forEach((item) => {
+          const isOpen = openLeaveDrawer === item.key;
+          const card = document.createElement("div");
+          card.className = "leave-card";
+
+          const previstosHtml = item.data.previstos.length
+            ? item.data.previstos.map(d => `<span class="date-chip previsto" data-jump="${d.dateKey}">${formatDisplayDate(d.dateKey)}${d.isCierre ? " · Cierre" : ""}</span>`).join("")
+            : `<span style="font-size: 11.5px; color: var(--text-soft);">Ninguno previsto</span>`;
+
+          const disfrutadosHtml = item.data.disfrutados.length
+            ? item.data.disfrutados.map(d => `<span class="date-chip" data-jump="${d.dateKey}">${formatDisplayDate(d.dateKey)}${d.isCierre ? " · Cierre" : ""}</span>`).join("")
+            : `<span style="font-size: 11.5px; color: var(--text-soft);">Ninguno disfrutado aún</span>`;
+
+          card.innerHTML = `
+            <div class="leave-card-top">
+              <div class="leave-title">
+                <span class="leave-dot" style="background: ${item.color};"></span>
+                <span>${item.title}</span>
+              </div>
+              <span style="font-size: 11.5px; font-weight: 700; color: var(--text-muted);">
+                Cupo: ${item.data.quota} · ${isOpen ? "▲ Ocultar" : "▼ Ver fechas"}
+              </span>
+            </div>
+            <div class="leave-metrics">
+              <div class="leave-metric-pill">
+                <span class="leave-metric-num" style="color: #2f7a5b;">${item.data.pendientes}</span>
+                <span class="leave-metric-lbl">Pendientes</span>
+              </div>
+              <div class="leave-metric-pill">
+                <span class="leave-metric-num" style="color: #2a6696;">${item.data.previstos.length}</span>
+                <span class="leave-metric-lbl">Previstos</span>
+              </div>
+              <div class="leave-metric-pill">
+                <span class="leave-metric-num">${item.data.disfrutados.length}</span>
+                <span class="leave-metric-lbl">Disfrutados</span>
+              </div>
+            </div>
+            ${isOpen ? `
+              <div class="leave-dropdown">
+                <div style="font-size: 11.5px; font-weight: 800; color: #2a6696;">📅 Previstos (fechas futuras):</div>
+                <div class="date-chips">${previstosHtml}</div>
+                <div style="font-size: 11.5px; font-weight: 800; color: var(--text-muted);">✅ Disfrutados (hasta hoy):</div>
+                <div class="date-chips" style="margin-bottom: 0;">${disfrutadosHtml}</div>
+              </div>
+            ` : ""}
+          `;
+
+          card.addEventListener("click", (e) => {
+            const jumpChip = e.target.closest("[data-jump]");
+            if (jumpChip) {
+              e.stopPropagation();
+              const [jy, jm] = jumpChip.getAttribute("data-jump").split("-").map(Number);
+              currentYear = jy;
+              currentMonth = jm - 1;
+              switchTab("calendario");
+              return;
+            }
+            if (e.target.closest(".leave-dropdown")) return;
+            openLeaveDrawer = isOpen ? null : item.key;
+            renderRecuento();
+          });
+
+          leaveContainer.appendChild(card);
+        });
+
+        const content = document.getElementById("recuentoContent");
+        const p1 = state.settings.person1Name || "Alba";
+        const p2 = state.settings.person2Name || "Lucía";
+        const targetPct = Number(state.settings.targetPct) || 75;
+
+        if (recuentoMode === "anual") {
+          const t = yStats.totals;
+          const pctStr = t.albaPct.toFixed(1).replace(".", ",");
+          const barW = Math.min(100, Math.max(0, t.albaPct));
+          const isClose = Math.abs(t.deviationShifts) <= 0.5;
+
+          const rowsHtml = yStats.months.map((m) => {
+            const isCurrent = m.year === now.getFullYear() && m.month === now.getMonth();
+            const mPct = m.effectiveWorkdays > 0 ? m.albaPct.toFixed(1).replace(".", ",") + "%" : "—";
+            const devTxt = m.effectiveWorkdays > 0 ? formatDeviationShort(m.deviationShifts) : "—";
+            let vldCell = `<span style="color: var(--text-soft);">—</span>`;
+            if (m.vac > 0 || m.ld > 0) {
+              const parts = [];
+              if (m.vac > 0) parts.push(`<span class="tag-v">${m.vac}V</span>`);
+              if (m.ld > 0) parts.push(`<span class="tag-ld">${m.ld}LD</span>`);
+              vldCell = `<span class="vld-inline">${parts.join("")}</span>`;
+            }
+
+            return `
+              <tr class="${isCurrent ? "current-month-row" : ""}" data-open-month="${m.month}">
+                <td><strong>${MONTHS_ES[m.month]}</strong></td>
+                <td>${m.effectiveWorkdays}</td>
+                <td>${m.albaShifts} <span style="color: var(--text-muted); font-size: 11px;">(${m.albaHours}h)</span></td>
+                <td>${m.luciaShifts} <span style="color: var(--text-muted); font-size: 11px;">(${m.luciaHours}h)</span></td>
+                <td><strong>${mPct}</strong></td>
+                <td>${devTxt}</td>
+                <td>${m.totalHours}h</td>
+                <td>${vldCell}</td>
+              </tr>
+            `;
+          }).join("");
+
+          let totalVldCell = "—";
+          if (t.vac > 0 || t.ld > 0) {
+            totalVldCell = `<span class="vld-inline"><span class="tag-v">${t.vac}V</span><span class="tag-ld">${t.ld}LD</span></span>`;
+          }
+
+          content.innerHTML = `
+            <div class="card">
+              <div class="card-title-row">
+                <h2 class="card-title">📈 Acumulado Anual ${recuentoYear}</h2>
+                <span class="dev-badge ${isClose ? "" : "warn"}">${formatDeviation(t.deviationShifts)}</span>
+              </div>
+
+              <div class="progress-wrap">
+                <div class="progress-labels">
+                  <div>
+                    <span class="big-pct">${pctStr}%</span>
+                    <span style="font-size: 12px; color: var(--text-muted); font-weight: 700;"> anual ${p1} (${t.albaShifts} de ${t.effectiveWorkdays} días laborables efectivos)</span>
+                  </div>
+                </div>
+                <div class="progress-track">
+                  <div class="progress-fill" style="width: ${barW}%;"></div>
+                  <div class="target-marker" style="left: ${targetPct}%;">
+                    <span class="target-tag">Obj. ${targetPct}%</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="stats-grid">
+                <div class="stat-box">
+                  <div class="stat-box-header"><span>${p1} (Anual)</span><span>${t.albaHours} h</span></div>
+                  <div class="stat-main-val">${t.albaShifts} turnos</div>
+                  <div class="stat-detail">${t.am} Mañanas · ${t.at} Tardes</div>
+                </div>
+                <div class="stat-box">
+                  <div class="stat-box-header"><span>${p2} (Anual)</span><span>${t.luciaHours} h</span></div>
+                  <div class="stat-main-val">${t.luciaShifts} turnos</div>
+                  <div class="stat-detail">${t.lm} Mañanas · ${t.lt} Tardes</div>
+                </div>
+                <div class="stat-box">
+                  <div class="stat-box-header"><span>Total Servicio</span><span>${t.festivos} Festivos</span></div>
+                  <div class="stat-main-val">${t.totalHours} horas</div>
+                  <div class="stat-detail">${t.effectiveWorkdays} jornadas cubiertas</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title-row">
+                <h2 class="card-title">🗓️ Desglose por meses (${recuentoYear})</h2>
+                <span style="font-size: 11px; color: var(--text-muted);">Toca un mes para verlo en detalle</span>
+              </div>
+              <div class="table-scroll">
+                <table class="summary-table">
+                  <thead>
+                    <tr>
+                      <th>Mes</th>
+                      <th>Lab. ef.</th>
+                      <th>${p1}</th>
+                      <th>${p2}</th>
+                      <th>% ${p1}</th>
+                      <th>Desv.</th>
+                      <th>Total h</th>
+                      <th>V / LD</th>
+                    </tr>
+                  </thead>
+                  <tbody>${rowsHtml}</tbody>
+                  <tfoot>
+                    <tr>
+                      <td>Total anual</td>
+                      <td>${t.effectiveWorkdays}</td>
+                      <td>${t.albaShifts} (${t.albaHours}h)</td>
+                      <td>${t.luciaShifts} (${t.luciaHours}h)</td>
+                      <td>${t.effectiveWorkdays > 0 ? pctStr + "%" : "—"}</td>
+                      <td>${t.effectiveWorkdays > 0 ? formatDeviationShort(t.deviationShifts) : "—"}</td>
+                      <td>${t.totalHours}h</td>
+                      <td>${totalVldCell}</td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          `;
+
+          content.querySelectorAll("[data-open-month]").forEach((tr) => {
+            tr.addEventListener("click", () => {
+              recuentoMonth = Number(tr.getAttribute("data-open-month"));
+              recuentoMode = "mensual";
+              renderRecuento();
+            });
+          });
+        } else {
+          // VISIÓN MENSUAL
+          const m = yStats.months[recuentoMonth];
+          const pctStr = m.albaPct.toFixed(1).replace(".", ",");
+          const barW = Math.min(100, Math.max(0, m.albaPct));
+          const isClose = Math.abs(m.deviationShifts) <= 0.5;
+
+          const monthPillsHtml = MONTHS_SHORT.map((lbl, idx) => `
+            <button type="button" class="month-pill ${idx === recuentoMonth ? "active" : ""}" data-pick-month="${idx}">${lbl}</button>
+          `).join("");
+
+          content.innerHTML = `
+            <div class="card">
+              <div class="month-pills-grid">${monthPillsHtml}</div>
+
+              <div class="card-title-row">
+                <h2 class="card-title">📅 Detalle de ${MONTHS_ES[recuentoMonth]} ${recuentoYear}</h2>
+                <button class="btn" id="jumpToCalMonthBtn">Ir al calendario →</button>
+              </div>
+
+              <div style="margin-bottom: 10px;">
+                <span class="dev-badge ${isClose ? "" : "warn"}">${formatDeviation(m.deviationShifts)}</span>
+              </div>
+
+              <div class="progress-wrap">
+                <div class="progress-labels">
+                  <div>
+                    <span class="big-pct">${pctStr}%</span>
+                    <span style="font-size: 12px; color: var(--text-muted); font-weight: 700;"> trabajado por ${p1} (${m.albaShifts} de ${m.effectiveWorkdays} días laborables)</span>
+                  </div>
+                </div>
+                <div class="progress-track">
+                  <div class="progress-fill" style="width: ${barW}%;"></div>
+                  <div class="target-marker" style="left: ${targetPct}%;">
+                    <span class="target-tag">Obj. ${targetPct}%</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="stats-grid">
+                <div class="stat-box">
+                  <div class="stat-box-header"><span>${p1}</span><span>${m.albaHours} horas</span></div>
+                  <div class="stat-main-val">${m.albaShifts} turnos</div>
+                  <div class="stat-detail">${m.am} Mañanas · ${m.at} Tardes</div>
+                </div>
+                <div class="stat-box">
+                  <div class="stat-box-header"><span>${p2}</span><span>${m.luciaHours} horas</span></div>
+                  <div class="stat-main-val">${m.luciaShifts} turnos</div>
+                  <div class="stat-detail">${m.lm} Mañanas · ${m.lt} Tardes</div>
+                </div>
+                <div class="stat-box">
+                  <div class="stat-box-header"><span>Ausencias y Festivos</span><span>Total: ${m.totalHours} h</span></div>
+                  <div class="stat-main-val">${m.vac} V · ${m.ld} LD · ${m.festivos} F</div>
+                  <div class="stat-detail">No computan en el ${targetPct}%</div>
+                </div>
+              </div>
+            </div>
+          `;
+
+          content.querySelectorAll("[data-pick-month]").forEach((btn) => {
+            btn.addEventListener("click", () => {
+              recuentoMonth = Number(btn.getAttribute("data-pick-month"));
+              renderRecuento();
+            });
+          });
+
+          document.getElementById("jumpToCalMonthBtn").addEventListener("click", () => {
+            currentYear = recuentoYear;
+            currentMonth = recuentoMonth;
+            switchTab("calendario");
+          });
+        }
+      }
+
+      // RENDER AJUSTES
+      function renderAjustes() {
+        document.getElementById("cfgPerson1Name").value = state.settings.person1Name || "Alba";
+        document.getElementById("cfgPerson2Name").value = state.settings.person2Name || "Lucía";
+        document.getElementById("cfgTargetPct").value = state.settings.targetPct ?? 75;
+        document.getElementById("cfgShiftHours").value = state.settings.shiftHours ?? 7;
+
+        document.getElementById("cfgQuotaYear").textContent = currentYear;
+        const q = (state.settings.quotas && state.settings.quotas[currentYear]) || { vac: 23, ld: 6 };
+        document.getElementById("cfgVacQuota").value = q.vac ?? 23;
+        document.getElementById("cfgLdQuota").value = q.ld ?? 6;
+
+        document.getElementById("cfgPinEnabled").value = String(state.settings.pinEnabled !== false);
+        document.getElementById("cfgPinCode").value = state.settings.pinCode || "1234";
+
+        const colorKeys = ["AM", "AT", "LM", "LT", "F", "V", "LD"];
+        const colorsGrid = document.getElementById("colorsConfigGrid");
+        colorsGrid.innerHTML = "";
+
+        colorKeys.forEach((k) => {
+          const meta = getShiftMeta(k);
+          const row = document.createElement("div");
+          row.className = "color-row";
+          row.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="padding: 3px 7px; border-radius: 7px; font-size: 11.5px; font-weight: 800; ${getCellVisualStyle(k)}; border-width: 1px; border-style: solid;">${meta.code}</span>
+              <span style="font-size: 12.5px; font-weight: 700;">${meta.label}</span>
+            </div>
+            <input type="color" value="${state.settings.colors[k]}" data-color-key="${k}" />
+          `;
+          colorsGrid.appendChild(row);
+        });
+
+        colorsGrid.querySelectorAll("input[type='color']").forEach((inp) => {
+          inp.addEventListener("change", (e) => {
+            const key = e.target.getAttribute("data-color-key");
+            state.settings.colors[key] = e.target.value;
+            commitStateChange();
+          });
+        });
+      }
+
+      function renderAll() {
+        renderHeader();
+        renderCalendar();
+        renderRecuento();
+        renderAjustes();
+      }
+
+      // NAVEGACIÓN DE PESTAÑAS
+      function switchTab(tabName) {
+        document.querySelectorAll(".nav-tab[data-tab]").forEach((t) => {
+          t.classList.toggle("active", t.getAttribute("data-tab") === tabName);
+        });
+        document.getElementById("tab-calendario").classList.toggle("hidden", tabName !== "calendario");
+        document.getElementById("tab-recuento").classList.toggle("hidden", tabName !== "recuento");
+        document.getElementById("tab-ajustes").classList.toggle("hidden", tabName !== "ajustes");
+        if (tabName === "recuento") renderRecuento();
+        if (tabName === "ajustes") renderAjustes();
+      }
+
+      document.querySelectorAll(".nav-tab[data-tab]").forEach((btn) => {
+        btn.addEventListener("click", () => switchTab(btn.getAttribute("data-tab")));
+      });
+
+      // CAMBIO DE MES CON ANIMACIÓN Y SWIPE
+      function changeMonth(delta) {
+        const grid = document.getElementById("calendarGrid");
+        grid.classList.add(delta > 0 ? "slide-left" : "slide-right");
+        setTimeout(() => {
+          currentMonth += delta;
+          if (currentMonth > 11) {
+            currentMonth = 0;
+            currentYear++;
+          } else if (currentMonth < 0) {
+            currentMonth = 11;
+            currentYear--;
+          }
+          renderCalendar();
+          grid.classList.remove("slide-left", "slide-right");
+        }, 120);
+      }
+
+      document.getElementById("prevMonthBtn").addEventListener("click", () => changeMonth(-1));
+      document.getElementById("nextMonthBtn").addEventListener("click", () => changeMonth(1));
+      document.getElementById("todayBtn").addEventListener("click", () => {
+        const t = new Date();
+        currentYear = t.getFullYear();
+        currentMonth = t.getMonth();
+        renderCalendar();
+      });
+
+      // Gestos táctiles y ratón en el calendario
+      let touchStartX = 0;
+      let touchStartY = 0;
+      let isSwiping = false;
+      const swipeArea = document.getElementById("calendarSwipeArea");
+
+      swipeArea.addEventListener("touchstart", (e) => {
+        touchStartX = e.changedTouches[0].clientX;
+        touchStartY = e.changedTouches[0].clientY;
+        isSwiping = false;
+      }, { passive: true });
+
+      swipeArea.addEventListener("touchmove", (e) => {
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        const dy = e.changedTouches[0].clientY - touchStartY;
+        if (Math.abs(dx) > 16 && Math.abs(dx) > Math.abs(dy)) {
+          isSwiping = true;
+        }
+      }, { passive: true });
+
+      swipeArea.addEventListener("touchend", (e) => {
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        const dy = e.changedTouches[0].clientY - touchStartY;
+        if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) {
+          changeMonth(dx < 0 ? 1 : -1);
+        }
+        setTimeout(() => { isSwiping = false; }, 60);
+      }, { passive: true });
+
+      // RELLENAR MES AUTOMÁTICAMENTE (L, X, J, V = AM; Martes = AT)
+      document.getElementById("autoFillBtn").addEventListener("click", () => {
+        const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+        let added = 0;
+        for (let d = 1; d <= daysInMonth; d++) {
+          const dow = new Date(currentYear, currentMonth, d).getDay(); // 0=Dom, 1=Lun, 2=Mar, 3=Mie, 4=Jue, 5=Vie, 6=Sab
+          if (dow === 0 || dow === 6) continue;
+          const key = toDateKey(currentYear, currentMonth, d);
+          if (!state.shifts[key]) {
+            state.shifts[key] = dow === 2 ? "AT" : "AM";
+            added++;
+          }
+        }
+        if (added > 0) {
+          commitStateChange();
+          showToast(`Rellenados ${added} días laborables con el horario habitual`);
+        } else {
+          showToast("Todos los días laborables de este mes ya tienen turno");
+        }
+      });
+
+      document.getElementById("clearMonthBtn").addEventListener("click", () => {
+        const prefix = `${currentYear}-${pad2(currentMonth + 1)}-`;
+        let removed = 0;
+        Object.keys(state.shifts).forEach((k) => {
+          if (k.startsWith(prefix)) {
+            delete state.shifts[k];
+            removed++;
+          }
+        });
+        if (removed > 0) {
+          commitStateChange();
+          showToast(`Limpiados ${removed} días de ${MONTHS_ES[currentMonth]}`);
+        }
+      });
+
+      // CONTROLES DE RECUENTO
+      document.getElementById("prevYearBtn").addEventListener("click", () => {
+        recuentoYear--;
+        renderRecuento();
+      });
+      document.getElementById("nextYearBtn").addEventListener("click", () => {
+        recuentoYear++;
+        renderRecuento();
+      });
+      document.getElementById("viewAnualBtn").addEventListener("click", () => {
+        recuentoMode = "anual";
+        renderRecuento();
+      });
+      document.getElementById("viewMensualBtn").addEventListener("click", () => {
+        recuentoMode = "mensual";
+        renderRecuento();
+      });
+
+      // LISTENERS DE AJUSTES
+      document.getElementById("cfgPerson1Name").addEventListener("change", (e) => {
+        state.settings.person1Name = e.target.value.trim() || "Alba";
+        commitStateChange();
+      });
+      document.getElementById("cfgPerson2Name").addEventListener("change", (e) => {
+        state.settings.person2Name = e.target.value.trim() || "Lucía";
+        commitStateChange();
+      });
+      document.getElementById("cfgTargetPct").addEventListener("change", (e) => {
+        state.settings.targetPct = Math.min(100, Math.max(1, Number(e.target.value) || 75));
+        commitStateChange();
+      });
+      document.getElementById("cfgShiftHours").addEventListener("change", (e) => {
+        state.settings.shiftHours = Math.max(0.5, Number(e.target.value) || 7);
+        commitStateChange();
+      });
+      document.getElementById("cfgVacQuota").addEventListener("change", (e) => {
+        if (!state.settings.quotas) state.settings.quotas = {};
+        if (!state.settings.quotas[currentYear]) state.settings.quotas[currentYear] = { vac: 23, ld: 6 };
+        state.settings.quotas[currentYear].vac = Math.max(0, Number(e.target.value) || 0);
+        commitStateChange();
+      });
+      document.getElementById("cfgLdQuota").addEventListener("change", (e) => {
+        if (!state.settings.quotas) state.settings.quotas = {};
+        if (!state.settings.quotas[currentYear]) state.settings.quotas[currentYear] = { vac: 23, ld: 6 };
+        state.settings.quotas[currentYear].ld = Math.max(0, Number(e.target.value) || 0);
+        commitStateChange();
+      });
+      document.getElementById("resetColorsBtn").addEventListener("click", () => {
+        state.settings.colors = { ...DEFAULT_COLORS };
+        commitStateChange();
+        showToast("Paleta natura restaurada");
+      });
+      document.getElementById("cfgPinEnabled").addEventListener("change", (e) => {
+        state.settings.pinEnabled = e.target.value === "true";
+        commitStateChange();
+        showToast(state.settings.pinEnabled ? "Bloqueo por PIN activado" : "Bloqueo por PIN desactivado");
+      });
+      document.getElementById("cfgPinCode").addEventListener("change", (e) => {
+        const val = e.target.value.replace(/\D/g, "").slice(0, 4);
+        if (val.length === 4) {
+          state.settings.pinCode = val;
+          commitStateChange();
+          showToast("PIN actualizado a " + val);
+        } else {
+          e.target.value = state.settings.pinCode;
+          showToast("El PIN debe tener exactamente 4 dígitos");
+        }
+      });
+
+      document.getElementById("syncBtn").addEventListener("click", () => pullFromCloud(false));
+      document.getElementById("forceSyncNowBtn").addEventListener("click", () => pushToCloud(false));
+
+      document.getElementById("exportJsonBtn").addEventListener("click", () => {
+        const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `respaldo-turnos-alba-${getTodayKey()}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+
+      document.getElementById("importJsonInput").addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          try {
+            const imported = JSON.parse(ev.target.result);
+            if (imported && imported.shifts) {
+              state = {
+                ...structuredClone(DEFAULT_STATE),
+                ...imported,
+                settings: {
+                  ...structuredClone(DEFAULT_STATE.settings),
+                  ...(imported.settings || {})
+                }
+              };
+              commitStateChange();
+              showToast("Copia de seguridad restaurada");
+            }
+          } catch (err) {
+            showToast("Archivo JSON no válido");
+          }
+        };
+        reader.readAsText(file);
+      });
+
+      // SISTEMA DE PIN DE 4 DÍGITOS
+      function setupPinPad() {
+        const pad = document.getElementById("pinPad");
+        const keys = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "C", "0", "⌫"];
+        pad.innerHTML = "";
+        keys.forEach((k) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "pin-key";
+          btn.textContent = k;
+          btn.addEventListener("click", () => handlePinKey(k));
+          pad.appendChild(btn);
+        });
+      }
+
+      function updatePinDots() {
+        const dots = document.querySelectorAll("#pinDots .pin-dot");
+        dots.forEach((d, idx) => d.classList.toggle("filled", idx < pinBuffer.length));
+      }
+
+      function handlePinKey(k) {
+        document.getElementById("pinError").textContent = "";
+        if (k === "C") {
+          pinBuffer = "";
+          updatePinDots();
+          return;
+        }
+        if (k === "⌫") {
+          pinBuffer = pinBuffer.slice(0, -1);
+          updatePinDots();
+          return;
+        }
+        if (pinBuffer.length < 4) {
+          pinBuffer += k;
+          updatePinDots();
+        }
+        if (pinBuffer.length === 4) {
+          const expected = state.settings.pinCode || "1234";
+          if (pinBuffer === expected) {
+            sessionStorage.setItem(UNLOCK_SESSION_KEY, "1");
+            document.getElementById("pinScreen").classList.add("hidden");
+            pinBuffer = "";
+            updatePinDots();
+            pullFromCloud(true);
+          } else {
+            document.getElementById("pinError").textContent = "PIN incorrecto";
+            setTimeout(() => {
+              pinBuffer = "";
+              updatePinDots();
+            }, 350);
+          }
+        }
+      }
+
+      document.getElementById("lockBtn").addEventListener("click", () => {
+        sessionStorage.removeItem(UNLOCK_SESSION_KEY);
+        pinBuffer = "";
+        updatePinDots();
+        document.getElementById("pinScreen").classList.remove("hidden");
+      });
+
+      // INICIALIZACIÓN
+      setupPinPad();
+      renderAll();
+
+      if (state.settings.pinEnabled !== false && sessionStorage.getItem(UNLOCK_SESSION_KEY) !== "1") {
+        document.getElementById("pinScreen").classList.remove("hidden");
+      } else {
+        pullFromCloud(true);
+      }
+    })();
+  </script>
+</body>
+</html>
